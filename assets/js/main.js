@@ -21,15 +21,22 @@
          var ratingSystem = $("#ratingSystem").val();
          var type = $('#type').val();
          var givenArea = $('#givenArea').val();
-         
+
          $.getJSON('https://leedonline-api.usgbc.org/v1/Common/getPriceRelatedInfo.json?countryOrCurrency=' + country, function (infodata) {
              var currency = infodata.data.currency;
+             var curSymbol;
+             if(currency == 'INR'){
+               curSymbol = "Rs.";
+             }
+             else {
+                curSymbol = "$";
+             }
              $.getJSON('https://leedonline-api.usgbc.org/v1/LEEDPricing/getVersionPricesInfo.json?versionOrCurrency=' + currency + '&ratingSystem=' + ratingSystem + '&area=' + givenArea + '&calculate=' + type, function (pricedata) {
                  
                  if (pricedata.payableInfo != undefined) {
-                     createTotalPriceTable(infodata, pricedata);
-                     createTaxTable(infodata, pricedata);
-                     createGrandTotal(infodata, pricedata);
+                     createTotalPriceTable(infodata, pricedata, curSymbol);
+                     createTaxTable(infodata, pricedata, curSymbol);
+                     createGrandTotal(infodata, pricedata, curSymbol);
                      $("#modalpopup").modal({ backdrop: "static"});
                  }
                  else {
@@ -45,7 +52,7 @@
      });
  });
 
- function createTotalPriceTable(infodata, pricedata) {
+ function createTotalPriceTable(infodata, pricedata, curSymbol) {
      
      var member = pricedata.payableInfo.member;
      var nonMember = pricedata.payableInfo.nonMember;
@@ -55,17 +62,19 @@
      tdrow.appendChild(textnode);
      trow.appendChild(tdrow);
      tdrow = document.createElement("td");
-     textnode = document.createTextNode(member.total);
+     tdrow.setAttribute("class", "text-right");
+     textnode = document.createTextNode(curSymbol+' '+member.total);
      tdrow.appendChild(textnode);
      trow.appendChild(tdrow);
      tdrow = document.createElement("td");
-     textnode = document.createTextNode(nonMember.total);
+     tdrow.setAttribute("class", "text-right");
+     textnode = document.createTextNode(curSymbol+' '+nonMember.total);
      tdrow.appendChild(textnode);
      trow.appendChild(tdrow);
      document.getElementById("tablebody").appendChild(trow);
  }
 
- function createTaxTable(infodata, pricedata) {
+ function createTaxTable(infodata, pricedata, curSymbol) {
      
      var taxCodes = infodata.data.taxCodes;
      var member = pricedata.payableInfo.member;
@@ -74,6 +83,7 @@
      if (memTaxObjSize > 0 && memTaxObjSize != "undefined") {
          var taxrow = document.createElement("tr");
          var tdrow = document.createElement("th");
+         tdrow.setAttribute("class", "text-center");
          var textnode = document.createTextNode("Taxes");
          tdrow.appendChild(textnode);
          taxrow.appendChild(tdrow);
@@ -82,15 +92,18 @@
          taxes.forEach(function (key) {
              var taxrow = document.createElement("tr");
              var tdrow = document.createElement("td");
+             tdrow.setAttribute("class", "text-center");
              var textnode = document.createTextNode(taxCodes[key]);
              tdrow.appendChild(textnode);
              taxrow.appendChild(tdrow);
              tdrow = document.createElement("td");
-             textnode = document.createTextNode(member.taxes.all.taxes[key]);
+             tdrow.setAttribute("class", "text-right");
+             textnode = document.createTextNode(curSymbol+' '+member.taxes.all.taxes[key]);
              tdrow.appendChild(textnode);
              taxrow.appendChild(tdrow);
              tdrow = document.createElement("td");
-             textnode = document.createTextNode(nonMember.taxes.all.taxes[key]);
+             tdrow.setAttribute("class", "text-right");
+             textnode = document.createTextNode(curSymbol+' '+nonMember.taxes.all.taxes[key]);
              tdrow.appendChild(textnode);
              taxrow.appendChild(tdrow);
              document.getElementById("tablebody").appendChild(taxrow);
@@ -98,7 +111,7 @@
      }
  }
 
- function createGrandTotal(infodata, pricedata) {
+ function createGrandTotal(infodata, pricedata, curSymbol) {
      
      var member = pricedata.payableInfo.member;
      var nonMember = pricedata.payableInfo.nonMember;
@@ -108,11 +121,13 @@
      tdrow.appendChild(textnode);
      grandTotalrow.appendChild(tdrow);
      tdrow = document.createElement("th");
-     textnode = document.createTextNode(member.taxes.all.grandTotal);
+     tdrow.setAttribute("class", "text-right");
+     textnode = document.createTextNode(curSymbol+' '+member.taxes.all.grandTotal);
      tdrow.appendChild(textnode);
      grandTotalrow.appendChild(tdrow);
      tdrow = document.createElement("th");
-     textnode = document.createTextNode(nonMember.taxes.all.grandTotal);
+     tdrow.setAttribute("class", "text-right");
+     textnode = document.createTextNode(curSymbol+' '+nonMember.taxes.all.grandTotal);
      tdrow.appendChild(textnode);
      grandTotalrow.appendChild(tdrow);
      document.getElementById("tablebody").appendChild(grandTotalrow);
