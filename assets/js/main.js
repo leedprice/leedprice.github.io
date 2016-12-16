@@ -14,67 +14,66 @@
      });
  }
  $(document).ready(function () {
+     
+     var BDC =  {
+         rate: "Registration",
+         designRate: "Design Review",
+         constRate: "Construction Review"};
+    
+     var IDC = {
+         rate: "Registration",
+         designRate: "Design Review",
+         constRate: "Construction Review"};
+   
+     var OM = {rate: "Registration" }
+     
+     $("#ratingSystem").change(function(){
+        var select = $("#ratingSystem option:selected").val();
+         switch (select) {
+             case "BD+C" :
+                 setTypeInDropDown(BDC);
+                 break;
+             case "ID+C" :
+                 setTypeInDropDown(IDC);
+                 break;
+             case "O+M" :
+                 setTypeInDropDown(OM);
+                 break;
+             default:
+             $("#type").empty();
+             $("#type").append("<option value=\"\">--Select Rate Type--</option>");    
+               break;  
+         }
+     });
+     
      $("#leedprice").submit(function () {
-         $("#submit-calculate").replaceWith("<button id=\"submit-dynamic\" class=\"btn btn-danger\"><i class=\"fa fa-spinner fa-pulse\"></i> Calculating</button>");
+         $("#submit-calculate").replaceWith("<button id=\"submit-dynamic\" class=\"btn btn-danger\" disabled><i class=\"fa fa-spinner fa-pulse\"></i> Calculating</button>");
          var country = $("#country").val();
          var ratingSystem = $("#ratingSystem").val();
          var type = $('#type').val();
          var givenArea = $('#givenArea').val();
-         var ptype;
-         if (type == 'rate') {
-             ptype = "Registration";
-         }
-         else if (type == 'designRate') {
-             ptype = "Design Review";
-         }
-         else {
-             ptype = "Construction Review";
-         }
-         var rSystem;
-         if (ratingSystem == 'BD+C') {
-             rSystem = "Building Design and Construction (BD+C)";
-         }
-         else if (ratingSystem == 'ID+C') {
-             rSystem = "Interior Design and Construction (ID+C)";
-         }
-         else {
-             rSystem = "Building Operations and Maintenance (O+M)";
-         }
-         var textnode = document.createTextNode(givenArea + " sq ft");
-         document.getElementById("pArea").appendChild(textnode);
-         textnode = document.createTextNode(rSystem);
-         document.getElementById("pRating").appendChild(textnode);
-         textnode = document.createTextNode(ptype);
-         document.getElementById("pType").appendChild(textnode);
+      
+         setDescrpition(givenArea, type, ratingSystem);
          $.getJSON('https://leedonline-api.usgbc.org/v1/Common/getPriceRelatedInfo.json?countryOrCurrency=' + country, function (infodata) {
-             var currency = infodata.data.currency;
-             var curSymbol;
-             if (currency == 'INR') {
+           if(infodata.data.currency != undefined){
+              var currency = infodata.data.currency;
+              var curSymbol;
+              if (currency == 'INR') {
                  curSymbol = "₹";
-             }
-             else if (currency == 'CAD') {
+              }
+              else if (currency == 'CAD') {
                  curSymbol = "$"
-                 currency = 'USD'; //by default US
-             }
-             else {
+                 currency = 'USD'; //Taking by default USD
+              }
+              else {
                  curSymbol = "$";
-             }
-             $.getJSON('https://leedonline-api.usgbc.org/v1/LEEDPricing/getVersionPricesInfo.json?versionOrCurrency=' + currency + '&ratingSystem=' + ratingSystem + '&area=' + givenArea + '&calculate=' + type, function (pricedata) {
-                 if (pricedata.payableInfo != undefined) {
-                     createTotalPriceTable(infodata, pricedata, curSymbol);
-                     createTaxTable(infodata, pricedata, curSymbol);
-                     createGrandTotal(infodata, pricedata, curSymbol);
-                     $("#modalpopup").modal({
-                         backdrop: "static"
-                     });
-                 }
-                 else {
-                     $("#modalerror").modal({
-                         backdrop: "static"
-                     });
-                 }
+              }
+             callTogetVersionPricesInfo(infodata, curSymbol, currency, givenArea, type, ratingSystem);
+            }
+             else {
+                 $("#modalerror").modal({backdrop: "static"});
                  $("#submit-dynamic").replaceWith("<button id=\"submit-calculate\" class=\"btn btn-primary\" type=\"submit\" name=\"submit\"><i class=\"fa fa-calculator\"></i> Calculate</button>");
-             });
+             }
          });
      });
      $(".modal-close").click(function () {
@@ -85,7 +84,35 @@
      });
  });
 
+ function setTypeInDropDown(rateType){
+    
+    $("#type").empty();
+    $("#type").append("<option value=\"\">--Select Rate Type--</option>");
+     
+    Object.keys(rateType).forEach(function(key) { 
+    $("#type").append("<option value=\"" + key + "\">" + rateType[key] + "</option>")
+  });
+     
+ }
+
+ function callTogetVersionPricesInfo(infodata, curSymbol, currency, givenArea, type, ratingSystem) {
+     
+     $.getJSON('https://leedonline-api.usgbc.org/v1/LEEDPricing/getVersionPricesInfo.json?versionOrCurrency=' + currency + '&ratingSystem=' + ratingSystem + '&area=' + givenArea + '&calculate=' + type, function (pricedata) {
+         if (pricedata.payableInfo != undefined) {
+             createTotalPriceTable(infodata, pricedata, curSymbol);
+             createTaxTable(infodata, pricedata, curSymbol);
+             createGrandTotal(infodata, pricedata, curSymbol);
+             $("#modalpopup").modal({backdrop: "static"});
+         }
+         else {
+             $("#modalerror").modal({backdrop: "static"});
+         }
+         $("#submit-dynamic").replaceWith("<button id=\"submit-calculate\" class=\"btn btn-primary\" type=\"submit\" name=\"submit\"><i class=\"fa fa-calculator\"></i> Calculate</button>");
+     });
+ }
+
  function createTotalPriceTable(infodata, pricedata, curSymbol) {
+     
      var member = pricedata.payableInfo.member;
      var nonMember = pricedata.payableInfo.nonMember;
      var trow = document.createElement("tr");
@@ -107,6 +134,7 @@
  }
 
  function createTaxTable(infodata, pricedata, curSymbol) {
+     
      var taxCodes = infodata.data.taxCodes;
      var member = pricedata.payableInfo.member;
      var nonMember = pricedata.payableInfo.nonMember;
@@ -147,6 +175,7 @@
  }
 
  function createGrandTotal(infodata, pricedata, curSymbol) {
+     
      var member = pricedata.payableInfo.member;
      var nonMember = pricedata.payableInfo.nonMember;
      var grandTotalrow = document.createElement("tr");
@@ -167,26 +196,47 @@
      document.getElementById("tablebody").appendChild(grandTotalrow);
  }
 
- function resetFormData() {
-     $("#leedprice").trigger("reset");
+ function setDescrpition(givenArea, type, ratingSystem) {
+     
+     var typeMap = {
+         rate: "Registration",
+         designRate: "Design Review",
+         constRate: "Construction Review"
+     };
+     var rSystem = {
+         "BD+C": "Building Design and Construction (BD+C)", 
+         "ID+C": "Interior Design and Construction (ID+C)",
+         "O+M": "Building Operations and Maintenance (O+M)"
+     };
+     var textnode = document.createTextNode(givenArea + " sq ft");
+     document.getElementById("pArea").appendChild(textnode);
+     textnode = document.createTextNode(rSystem[ratingSystem]);
+     document.getElementById("pRating").appendChild(textnode);
+     textnode = document.createTextNode(typeMap[type]);
+     document.getElementById("pType").appendChild(textnode);
  }
 
  function printData() {
+     
      var headToPrint = document.getElementById("head4");
      var p1ToPrint = document.getElementById("pDesc1");
      var p2ToPrint = document.getElementById("pDesc2");
      var p3ToPrint = document.getElementById("pDesc3");
      var divToPrint = document.getElementById("datatable");
-     var htmlToPrint = '' + '<style type="text/css">' + 
-         'table {' + 'border:solid #000 !important;' + 
-         'border-width:1px 0 0 1px !important;' + '}' +
-         'th, td {' + 'padding:12px !important;' + 
+     var htmlToPrint = '' + 
+         '<style type="text/css">' +
+         'table {' + 
          'border:solid #000 !important;' + 
-         'border-width:0 1px 1px 0 !important;' + 
+         'border-width:1px 0 0 1px !important;' + 
+         '}' + 'th, td {' + 
+         'padding:12px !important;' +
+         'border:solid #000 !important;' +
+         'border-width:0 1px 1px 0 !important;' +
          'font-size:20px !important;' + 
          '}' + 
          '#head4 {' + 
-         'font-size:20px !important;' + '}' + 
+         'font-size:20px !important;' + 
+         '}' + 
          '</style>';
      htmlToPrint += divToPrint.outerHTML;
      newWin = window.open("");
@@ -197,4 +247,8 @@
      newWin.document.write(htmlToPrint);
      newWin.print();
      newWin.close();
+ }
+
+ function resetFormData() {
+     $("#leedprice").trigger("reset");
  }

@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-    <title>Leed Price Calculator</title>
+    <title>Leed Pricing Calculator</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
@@ -14,7 +14,7 @@
     <script src="assets/js/main.js"></script>
 </head>
 
-<body>
+<body onload="resetFormData()">
     <div class="container">
         <div class="row">
             <div class="col-sm-12 text-center">
@@ -23,12 +23,13 @@
                           Pricing Calculator
                 </h1>
                  </div>
+                 <br>
             </div>
         </div>
         <div class="row">
             <div class="col-md-6 col-md-offset-3 col-sm-6 col-sm-offset-3 col-xs-10 col-xs-offset-1">
                 <div class="panel panel-primary">
-                    <div class="panel-heading"> <strong> Leed Pricing Estimate </strong> </div>
+                    <div class="panel-heading"> <strong>Enter Leed Pricing Estimate </strong> </div>
                     <div class="panel-body">
                         <form name="form" id="leedprice" action="javascript:void(0)" role="form">
                             <br>
@@ -40,18 +41,15 @@
                             </div>
                             <div class="form-group input-group"> <span class="input-group-addon"><i class="fa fa-star" aria-hidden="true"></i></span>
                                 <select class="form-control" id="ratingSystem" name="ratingSystem" required>
-                                    <option value="">Select Rating Sytem</option>
-                                    <option value="BD+C">Building Design and Construction</option>
-                                    <option value="ID+C">Interior Design and Construction</option>
-                                    <option value="O+M">Building Operations and Maintenance</option>
+                                    <option value="">--Select Rating Sytem--</option>
+                                    <option value="BD+C">Building Design and Construction (BD+C)</option>
+                                    <option value="ID+C">Interior Design and Construction (ID+C)</option>
+                                    <option value="O+M">Building Operations and Maintenance (O+M)</option>
                                 </select>
                             </div>
                             <div class="form-group input-group"> <span class="input-group-addon"><i class="fa fa-file-text" aria-hidden="true"></i></span>
                                 <select class="form-control" id="type" name="type" required>
-                                    <option value="">Select Type</option>
-                                    <option value="rate">Registration</option>
-                                    <option value="designRate">Design Review</option>
-                                    <option value="constRate">Construction Review</option>
+                                 <option value="">--Select Rate Type--</option>
                                 </select>
                             </div>
                             <div class="form-group input-group"> <span class="input-group-addon"><i class="fa fa-object-group" aria-hidden="true"></i></span>
@@ -97,15 +95,15 @@
             </div>
         </div>
     </div>
-    <!-- model error -->
+    <!-- modal for error -->
     <div class="modal fade" id="modalerror" tabindex="-1" role="dialog">
-        <div class="modal-dialog modal-md">
+        <div class="modal-dialog modal-sm">
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close modal-close" data-dismiss="modal">&times;</button>
                     <h4 class="modal-title text-danger">Data Error</h4> </div>
                 <div class="modal-body">
-                    <p><strong>Cannot calculate wrong Data entered.</strong></p>
+                    <p><strong>Cannot calculate, Input Data Error.</strong></p>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-danger modal-close" data-dismiss="modal">Close</button>
