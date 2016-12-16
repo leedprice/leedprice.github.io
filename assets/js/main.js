@@ -25,12 +25,16 @@
          $.getJSON('https://leedonline-api.usgbc.org/v1/Common/getPriceRelatedInfo.json?countryOrCurrency=' + country, function (infodata) {
              var currency = infodata.data.currency;
              var curSymbol;
-             if(currency == 'INR'){
-               curSymbol = "Rs.";
-             }
-             else {
-                curSymbol = "$";
-             }
+              if (currency == 'INR') {
+                  curSymbol = "Rs.";
+              }
+              else if (currency == 'CAD') {
+                  curSymbol = "C$"
+                  currency = 'USD'; //by default US
+              }
+              else {
+                  curSymbol = "$";
+              }
              $.getJSON('https://leedonline-api.usgbc.org/v1/LEEDPricing/getVersionPricesInfo.json?versionOrCurrency=' + currency + '&ratingSystem=' + ratingSystem + '&area=' + givenArea + '&calculate=' + type, function (pricedata) {
                  
                  if (pricedata.payableInfo != undefined) {
