@@ -1,5 +1,5 @@
  function print_country(country_id) {
-     // given the id of the <select> tag as function argument, it inserts <option> tags
+  
      $("#country-icon").replaceWith("<i id=\"country-icon-dynamic\" class=\"fa fa-refresh fa-pulse\"></i>");
      $.getJSON('https://leedonline-api.usgbc.org/v1/Common/getCountriesAndStates.json', function (data) {
          var option_str = document.getElementById(country_id);
@@ -30,14 +30,10 @@
                      createTotalPriceTable(infodata, pricedata);
                      createTaxTable(infodata, pricedata);
                      createGrandTotal(infodata, pricedata);
-                     $("#modalpopup").modal({
-                         backdrop: "static"
-                     });
+                     $("#modalpopup").modal({ backdrop: "static"});
                  }
                  else {
-                     $("#modalerror").modal({
-                         backdrop: "static"
-                     });
+                     $("#modalerror").modal({ backdrop: "static"});
                  }
                  $("#submit-dynamic").replaceWith("<button id=\"submit-calculate\" class=\"btn btn-primary\" type=\"submit\" name=\"submit\"><i class=\"fa fa-calculator\"></i> Calculate</button>");
              });
@@ -50,6 +46,7 @@
  });
 
  function createTotalPriceTable(infodata, pricedata) {
+     
      var member = pricedata.payableInfo.member;
      var nonMember = pricedata.payableInfo.nonMember;
      var trow = document.createElement("tr");
@@ -69,6 +66,7 @@
  }
 
  function createTaxTable(infodata, pricedata) {
+     
      var taxCodes = infodata.data.taxCodes;
      var member = pricedata.payableInfo.member;
      var nonMember = pricedata.payableInfo.nonMember;
@@ -101,6 +99,7 @@
  }
 
  function createGrandTotal(infodata, pricedata) {
+     
      var member = pricedata.payableInfo.member;
      var nonMember = pricedata.payableInfo.nonMember;
      var grandTotalrow = document.createElement("tr");
