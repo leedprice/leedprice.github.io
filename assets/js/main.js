@@ -18,14 +18,14 @@
      $("#leedprice").submit(function () {
          $("#submit-calculate").replaceWith("<button id=\"submit-dynamic\" class=\"btn btn-danger\"><i class=\"fa fa-spinner fa-pulse\"></i> Calculating</button>");
          var country = $("#country").val();
-         var state = $("#state").val();
          var ratingSystem = $("#ratingSystem").val();
          var type = $('#type').val();
          var givenArea = $('#givenArea').val();
+         
          $.getJSON('https://leedonline-api.usgbc.org/v1/Common/getPriceRelatedInfo.json?countryOrCurrency=' + country, function (infodata) {
              var currency = infodata.data.currency;
              $.getJSON('https://leedonline-api.usgbc.org/v1/LEEDPricing/getVersionPricesInfo.json?versionOrCurrency=' + currency + '&ratingSystem=' + ratingSystem + '&area=' + givenArea + '&calculate=' + type, function (pricedata) {
-                 // console.log(pricedata.payableInfo.member.taxes.all.taxes.length);
+                 
                  if (pricedata.payableInfo != undefined) {
                      createTotalPriceTable(infodata, pricedata);
                      createTaxTable(infodata, pricedata);
