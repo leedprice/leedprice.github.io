@@ -1,5 +1,4 @@
  function print_country(country_id) {
-  
      $("#country-icon").replaceWith("<i id=\"country-icon-dynamic\" class=\"fa fa-refresh fa-pulse\"></i>");
      $.getJSON('https://leedonline-api.usgbc.org/v1/Common/getCountriesAndStates.json', function (data) {
          var option_str = document.getElementById(country_id);
@@ -21,47 +20,58 @@
          var ratingSystem = $("#ratingSystem").val();
          var type = $('#type').val();
          var givenArea = $('#givenArea').val();
-
-          var ptype;
-          if(type=='rate'){  ptype="Registration"; }
-          else if(type == 'designRate'){ ptype="Design Review";  }
-          else {  ptype="Construction Review"; }
-
-          var rSystem;
-          if(ratingSystem=='BD+C'){  rSystem="Building Design and Construction (BD+C)"; }
-          else if(ratingSystem == 'ID+C'){ rSystem="Interior Design and Construction (ID+C)";  }
-          else {  rSystem="Building Operations and Maintenance (O+M)"; }
-
-          var textnode = document.createTextNode(givenArea+" sq ft");
-          document.getElementById("pArea").appendChild(textnode);
-          textnode = document.createTextNode(rSystem);
-          document.getElementById("pRating").appendChild(textnode);
-          textnode = document.createTextNode(ptype);
-          document.getElementById("pType").appendChild(textnode);
-
+         var ptype;
+         if (type == 'rate') {
+             ptype = "Registration";
+         }
+         else if (type == 'designRate') {
+             ptype = "Design Review";
+         }
+         else {
+             ptype = "Construction Review";
+         }
+         var rSystem;
+         if (ratingSystem == 'BD+C') {
+             rSystem = "Building Design and Construction (BD+C)";
+         }
+         else if (ratingSystem == 'ID+C') {
+             rSystem = "Interior Design and Construction (ID+C)";
+         }
+         else {
+             rSystem = "Building Operations and Maintenance (O+M)";
+         }
+         var textnode = document.createTextNode(givenArea + " sq ft");
+         document.getElementById("pArea").appendChild(textnode);
+         textnode = document.createTextNode(rSystem);
+         document.getElementById("pRating").appendChild(textnode);
+         textnode = document.createTextNode(ptype);
+         document.getElementById("pType").appendChild(textnode);
          $.getJSON('https://leedonline-api.usgbc.org/v1/Common/getPriceRelatedInfo.json?countryOrCurrency=' + country, function (infodata) {
              var currency = infodata.data.currency;
              var curSymbol;
-              if (currency == 'INR') {
-                  curSymbol = "₹";
-              }
-              else if (currency == 'CAD') {
-                  curSymbol = "$"
-                  currency = 'USD'; //by default US
-              }
-              else {
-                  curSymbol = "$";
-              }
+             if (currency == 'INR') {
+                 curSymbol = "₹";
+             }
+             else if (currency == 'CAD') {
+                 curSymbol = "$"
+                 currency = 'USD'; //by default US
+             }
+             else {
+                 curSymbol = "$";
+             }
              $.getJSON('https://leedonline-api.usgbc.org/v1/LEEDPricing/getVersionPricesInfo.json?versionOrCurrency=' + currency + '&ratingSystem=' + ratingSystem + '&area=' + givenArea + '&calculate=' + type, function (pricedata) {
-                 
                  if (pricedata.payableInfo != undefined) {
                      createTotalPriceTable(infodata, pricedata, curSymbol);
                      createTaxTable(infodata, pricedata, curSymbol);
                      createGrandTotal(infodata, pricedata, curSymbol);
-                     $("#modalpopup").modal({ backdrop: "static"});
+                     $("#modalpopup").modal({
+                         backdrop: "static"
+                     });
                  }
                  else {
-                     $("#modalerror").modal({ backdrop: "static"});
+                     $("#modalerror").modal({
+                         backdrop: "static"
+                     });
                  }
                  $("#submit-dynamic").replaceWith("<button id=\"submit-calculate\" class=\"btn btn-primary\" type=\"submit\" name=\"submit\"><i class=\"fa fa-calculator\"></i> Calculate</button>");
              });
@@ -76,7 +86,6 @@
  });
 
  function createTotalPriceTable(infodata, pricedata, curSymbol) {
-     
      var member = pricedata.payableInfo.member;
      var nonMember = pricedata.payableInfo.nonMember;
      var trow = document.createElement("tr");
@@ -86,19 +95,18 @@
      trow.appendChild(tdrow);
      tdrow = document.createElement("td");
      tdrow.setAttribute("class", "text-right");
-     textnode = document.createTextNode(curSymbol+' '+member.total);
+     textnode = document.createTextNode(curSymbol + ' ' + member.total);
      tdrow.appendChild(textnode);
      trow.appendChild(tdrow);
      tdrow = document.createElement("td");
      tdrow.setAttribute("class", "text-right");
-     textnode = document.createTextNode(curSymbol+' '+nonMember.total);
+     textnode = document.createTextNode(curSymbol + ' ' + nonMember.total);
      tdrow.appendChild(textnode);
      trow.appendChild(tdrow);
      document.getElementById("tablebody").appendChild(trow);
  }
 
  function createTaxTable(infodata, pricedata, curSymbol) {
-     
      var taxCodes = infodata.data.taxCodes;
      var member = pricedata.payableInfo.member;
      var nonMember = pricedata.payableInfo.nonMember;
@@ -125,12 +133,12 @@
              taxrow.appendChild(tdrow);
              tdrow = document.createElement("td");
              tdrow.setAttribute("class", "text-right");
-             textnode = document.createTextNode(curSymbol+' '+member.taxes.all.taxes[key]);
+             textnode = document.createTextNode(curSymbol + ' ' + member.taxes.all.taxes[key]);
              tdrow.appendChild(textnode);
              taxrow.appendChild(tdrow);
              tdrow = document.createElement("td");
              tdrow.setAttribute("class", "text-right");
-             textnode = document.createTextNode(curSymbol+' '+nonMember.taxes.all.taxes[key]);
+             textnode = document.createTextNode(curSymbol + ' ' + nonMember.taxes.all.taxes[key]);
              tdrow.appendChild(textnode);
              taxrow.appendChild(tdrow);
              document.getElementById("tablebody").appendChild(taxrow);
@@ -139,7 +147,6 @@
  }
 
  function createGrandTotal(infodata, pricedata, curSymbol) {
-     
      var member = pricedata.payableInfo.member;
      var nonMember = pricedata.payableInfo.nonMember;
      var grandTotalrow = document.createElement("tr");
@@ -149,51 +156,45 @@
      grandTotalrow.appendChild(tdrow);
      tdrow = document.createElement("th");
      tdrow.setAttribute("class", "text-right");
-     textnode = document.createTextNode(curSymbol+' '+member.taxes.all.grandTotal);
+     textnode = document.createTextNode(curSymbol + ' ' + member.taxes.all.grandTotal);
      tdrow.appendChild(textnode);
      grandTotalrow.appendChild(tdrow);
      tdrow = document.createElement("th");
      tdrow.setAttribute("class", "text-right");
-     textnode = document.createTextNode(curSymbol+' '+nonMember.taxes.all.grandTotal);
+     textnode = document.createTextNode(curSymbol + ' ' + nonMember.taxes.all.grandTotal);
      tdrow.appendChild(textnode);
      grandTotalrow.appendChild(tdrow);
      document.getElementById("tablebody").appendChild(grandTotalrow);
  }
 
- function resetFormData(){
-    $("#leedprice").trigger("reset");
+ function resetFormData() {
+     $("#leedprice").trigger("reset");
  }
 
-function printData()
-{   
-    var headToPrint=document.getElementById("head4");
-    var p1ToPrint=document.getElementById("pDesc1");
-    var p2ToPrint=document.getElementById("pDesc2");
-    var p3ToPrint=document.getElementById("pDesc3");
-   var divToPrint=document.getElementById("datatable");
-    var htmlToPrint = '' +
-        '<style type="text/css">' +
-        'table {' +
-        'border:solid #000 !important;' +
-        'border-width:1px 0 0 1px !important;' +
-        '}' +
-         'th, td {' +
-         'padding:12px !important;' +
-        'border:solid #000 !important;' +
-        'border-width:0 1px 1px 0 !important;' +
-        'font-size:20px !important;' +
-        '}' +
-        '#head4 {'+
-         'font-size:20px !important;'+
-        '}'+
-        '</style>';
-    htmlToPrint += divToPrint.outerHTML;
-   newWin= window.open("");
-    newWin.document.write(headToPrint.outerHTML);
+ function printData() {
+     var headToPrint = document.getElementById("head4");
+     var p1ToPrint = document.getElementById("pDesc1");
+     var p2ToPrint = document.getElementById("pDesc2");
+     var p3ToPrint = document.getElementById("pDesc3");
+     var divToPrint = document.getElementById("datatable");
+     var htmlToPrint = '' + '<style type="text/css">' + 
+         'table {' + 'border:solid #000 !important;' + 
+         'border-width:1px 0 0 1px !important;' + '}' +
+         'th, td {' + 'padding:12px !important;' + 
+         'border:solid #000 !important;' + 
+         'border-width:0 1px 1px 0 !important;' + 
+         'font-size:20px !important;' + 
+         '}' + 
+         '#head4 {' + 
+         'font-size:20px !important;' + '}' + 
+         '</style>';
+     htmlToPrint += divToPrint.outerHTML;
+     newWin = window.open("");
+     newWin.document.write(headToPrint.outerHTML);
      newWin.document.write(p1ToPrint.outerHTML);
-   newWin.document.write(p2ToPrint.outerHTML);
-    newWin.document.write(p3ToPrint.outerHTML);
-    newWin.document.write(htmlToPrint);
-   newWin.print();
-   newWin.close();
-}
+     newWin.document.write(p2ToPrint.outerHTML);
+     newWin.document.write(p3ToPrint.outerHTML);
+     newWin.document.write(htmlToPrint);
+     newWin.print();
+     newWin.close();
+ }
