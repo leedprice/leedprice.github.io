@@ -29,7 +29,7 @@
                   curSymbol = "Rs.";
               }
               else if (currency == 'CAD') {
-                  curSymbol = "C$"
+                  curSymbol = "$"
                   currency = 'USD'; //by default US
               }
               else {
