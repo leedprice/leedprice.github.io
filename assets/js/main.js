@@ -26,10 +26,15 @@
           if(type=='rate'){  ptype="Registration"; }
           else if(type == 'designRate'){ ptype="Design Review";  }
           else {  ptype="Construction Review"; }
-          
+
+          var rSystem;
+          if(ratingSystem=='BD+C'){  rSystem="Building Design and Construction (BD+C)"; }
+          else if(ratingSystem == 'ID+C'){ rSystem="Interior Design and Construction (ID+C)";  }
+          else {  rSystem="Building Operations and Maintenance (O+M)"; }
+
           var textnode = document.createTextNode(givenArea+" sq ft");
           document.getElementById("pArea").appendChild(textnode);
-          textnode = document.createTextNode(ratingSystem);
+          textnode = document.createTextNode(rSystem);
           document.getElementById("pRating").appendChild(textnode);
           textnode = document.createTextNode(ptype);
           document.getElementById("pType").appendChild(textnode);
@@ -38,7 +43,7 @@
              var currency = infodata.data.currency;
              var curSymbol;
               if (currency == 'INR') {
-                  curSymbol = "Rs.";
+                  curSymbol = "₹";
               }
               else if (currency == 'CAD') {
                   curSymbol = "$"
@@ -64,7 +69,9 @@
      });
      $(".modal-close").click(function () {
          $('#tablebody').empty();
-         $("#leedprice").trigger("reset");
+         $('#pArea').empty();
+         $('#pRating').empty();
+         $('#pType').empty();
      });
  });
 
@@ -99,10 +106,14 @@
      if (memTaxObjSize > 0 && memTaxObjSize != "undefined") {
          var taxrow = document.createElement("tr");
          var tdrow = document.createElement("th");
+         var td2 = document.createElement("td");
+         var td3 = document.createElement("td");
          tdrow.setAttribute("class", "text-center");
          var textnode = document.createTextNode("Taxes");
          tdrow.appendChild(textnode);
          taxrow.appendChild(tdrow);
+         taxrow.appendChild(td2);
+         taxrow.appendChild(td3);
          document.getElementById("tablebody").appendChild(taxrow);
          var taxes = Object.keys(member.taxes.all.taxes);
          taxes.forEach(function (key) {
@@ -148,3 +159,41 @@
      grandTotalrow.appendChild(tdrow);
      document.getElementById("tablebody").appendChild(grandTotalrow);
  }
+
+ function resetFormData(){
+    $("#leedprice").trigger("reset");
+ }
+
+function printData()
+{   
+    var headToPrint=document.getElementById("head4");
+    var p1ToPrint=document.getElementById("pDesc1");
+    var p2ToPrint=document.getElementById("pDesc2");
+    var p3ToPrint=document.getElementById("pDesc3");
+   var divToPrint=document.getElementById("datatable");
+    var htmlToPrint = '' +
+        '<style type="text/css">' +
+        'table {' +
+        'border:solid #000 !important;' +
+        'border-width:1px 0 0 1px !important;' +
+        '}' +
+         'th, td {' +
+         'padding:12px !important;' +
+        'border:solid #000 !important;' +
+        'border-width:0 1px 1px 0 !important;' +
+        'font-size:20px !important;' +
+        '}' +
+        '#head4 {'+
+         'font-size:20px !important;'+
+        '}'+
+        '</style>';
+    htmlToPrint += divToPrint.outerHTML;
+   newWin= window.open("");
+    newWin.document.write(headToPrint.outerHTML);
+     newWin.document.write(p1ToPrint.outerHTML);
+   newWin.document.write(p2ToPrint.outerHTML);
+    newWin.document.write(p3ToPrint.outerHTML);
+    newWin.document.write(htmlToPrint);
+   newWin.print();
+   newWin.close();
+}

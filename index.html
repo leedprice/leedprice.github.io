@@ -19,9 +19,10 @@
         <div class="row">
             <div class="col-sm-12 text-center">
                 <div class="logo margin-top-30">
-                    <h1> <img  src="assets/logo/seal.png" alt="Leed">
-                      <strong class="text-white"> Pricing Calculator</strong>
-                </h1> </div>
+                    <h1 id="head1"> <img  src="assets/logo/seal.png" alt="Leed">
+                          Pricing Calculator
+                </h1>
+                 </div>
             </div>
         </div>
         <div class="row">
@@ -38,7 +39,13 @@
                                 </script>
                             </div>
                             <div class="form-group input-group"> <span class="input-group-addon"><i class="fa fa-star" aria-hidden="true"></i></span>
-                                <input type="text" id="ratingSystem" value="" name="ratingSystem" class="form-control" placeholder="Enter Rating System Group" required> </div>
+                                <select class="form-control" id="ratingSystem" name="ratingSystem" required>
+                                    <option value="">Select Rating Sytem</option>
+                                    <option value="BD+C">Building Design and Construction</option>
+                                    <option value="ID+C">Interior Design and Construction</option>
+                                    <option value="O+M">Building Operations and Maintenance</option>
+                                </select>
+                            </div>
                             <div class="form-group input-group"> <span class="input-group-addon"><i class="fa fa-file-text" aria-hidden="true"></i></span>
                                 <select class="form-control" id="type" name="type" required>
                                     <option value="">Select Type</option>
@@ -48,9 +55,10 @@
                                 </select>
                             </div>
                             <div class="form-group input-group"> <span class="input-group-addon"><i class="fa fa-object-group" aria-hidden="true"></i></span>
-                                <input type="text" id="givenArea" value="" name="givenArea" class="form-control" placeholder="Enter Area in Sq.Ft." required> </div>
-                            <div class="form-group input-group">
+                                <input type="text" id="givenArea" value="" name="givenArea" class="form-control" placeholder="Enter area in Square Feet" required> </div>
+                            <div class="form-group">
                                 <button class="btn btn-primary" type="submit" name="submit" id="submit-calculate"> <i class="fa fa-calculator" aria-hidden="true"></i> Calculate</button>
+                                <div class="pull-right"><button class="btn btn-danger" onclick="resetFormData()">Reset</button> </div>  
                             </div>
                         </form>
                     </div>
@@ -63,12 +71,12 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close modal-close" data-dismiss="modal">&times;</button>
-                    <h4 class="modal-title text-success">LEED Pricing Estimate</h4> </div>
+                    <h4 id="head4" class="modal-title text-success">LEED Pricing Estimate</h4> </div>
                 <div class="modal-body">
-                    <p id="pArea"><strong>Area : </strong></p>
-                    <p id="pRating"><strong>Rating System: </strong></p>
-                    <p id="pType"><strong>Project Type : </strong></p>
-                    <table class="table table-striped">
+                    <p id="pDesc1"><strong>Area : </strong><span id="pArea"></span></p>
+                    <p id="pDesc2"><strong>Rating System : </strong><span id="pRating"></span></p>
+                    <p id="pDesc3"><strong>Project Type : </strong><span id="pType"></span></p>
+                    <table class="table table-striped" id="datatable">
                         <thead>
                             <tr>
                                 <th></th>
@@ -80,6 +88,10 @@
                     </table>
                 </div>
                 <div class="modal-footer">
+                 <span class="pull-left">
+                  <button href="#" class="btn btn-warning" onclick="printData()">Print <i class="fa fa-print" aria-hidden="true"></i>
+                   </button>
+                  </span>
                     <button type="button" class="btn btn-danger modal-close" data-dismiss="modal">Close</button>
                 </div>
             </div>
@@ -93,7 +105,7 @@
                     <button type="button" class="close modal-close" data-dismiss="modal">&times;</button>
                     <h4 class="modal-title text-danger">Data Error</h4> </div>
                 <div class="modal-body">
-                    <p><strong>Rating system not found or maybe wrong Data entered.</strong></p>
+                    <p><strong>Cannot calculate wrong Data entered.</strong></p>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-danger modal-close" data-dismiss="modal">Close</button>
