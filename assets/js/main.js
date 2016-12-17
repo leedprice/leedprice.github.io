@@ -3,7 +3,7 @@
      $.getJSON('https://leedonline-api.usgbc.org/v1/Common/getCountriesAndStates.json', function (data) {
          var option_str = document.getElementById(country_id);
          option_str.length = 0;
-         option_str.options[0] = new Option('Select Country', '');
+         option_str.options[0] = new Option('--Select Country--', '');
          option_str.selectedIndex = 0;
          var countries = data.countries;
          var printCountries = Object.keys(countries);
@@ -15,26 +15,21 @@
  }
  $(document).ready(function () {
      
-     var BDC =  {
+     var BDCIDC =  {
          rate: "Registration",
          designRate: "Design Review",
          constRate: "Construction Review"};
-    
-     var IDC = {
-         rate: "Registration",
-         designRate: "Design Review",
-         constRate: "Construction Review"};
-   
+ 
      var OM = {rate: "Registration" }
      
      $("#ratingSystem").change(function(){
         var select = $("#ratingSystem option:selected").val();
          switch (select) {
              case "BD+C" :
-                 setTypeInDropDown(BDC);
+                 setTypeInDropDown(BDCIDC);
                  break;
              case "ID+C" :
-                 setTypeInDropDown(IDC);
+                 setTypeInDropDown(BDCIDC);
                  break;
              case "O+M" :
                  setTypeInDropDown(OM);
