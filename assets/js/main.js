@@ -1,4 +1,5 @@
  function print_country(country_id) {
+    
      $("#country-icon").replaceWith("<i id=\"country-icon-dynamic\" class=\"fa fa-refresh fa-pulse\"></i>");
      $.getJSON('https://leedonline-api.usgbc.org/v1/Common/getCountriesAndStates.json', function (data) {
          var option_str = document.getElementById(country_id);
@@ -211,27 +212,81 @@
      document.getElementById("pType").appendChild(textnode);
  }
 
+ // Custom message validation Function 
+
+ function checkValidationInput(obj, param) {
+     var setMessage = {
+         "country": "Please select country in the list.",
+         "ratingSystem": "Please select Rating System in the list.",
+         "type": "Select Project Type.",
+         "givenArea": "Please enter area in sq ft."
+     };
+     switch (param) {
+         case "country":
+             obj.setCustomValidity(setMessage[param]);
+             break;
+         case "ratingSystem":
+             obj.setCustomValidity(setMessage[param]);
+             break;
+         case "type":
+             obj.setCustomValidity(setMessage[param]);
+             break;
+         case "givenArea":
+             obj.setCustomValidity(setMessage[param]);
+             break;
+         default:
+             return;
+             break;
+     }
+ }
+
+ function verifyValidInput(obj, param) {
+
+     try {
+         switch (param) {
+             case "country":
+                 obj.setCustomValidity('');
+                 break;
+             case "ratingSystem":
+                 obj.setCustomValidity('');
+                 break;
+             case "type":
+                 obj.setCustomValidity('');
+                 break;
+             case "givenArea":
+                 obj.setCustomValidity('');
+                 break;
+             default:
+                 return;
+                 break;
+
+         }
+     } catch (e) {
+         console.log(e);
+        }
+ }
+
  function printData() {
-     
+
      var headToPrint = document.getElementById("head4");
      var p1ToPrint = document.getElementById("pDesc1");
      var p2ToPrint = document.getElementById("pDesc2");
      var p3ToPrint = document.getElementById("pDesc3");
      var divToPrint = document.getElementById("datatable");
-     var htmlToPrint = '' + 
+     var htmlToPrint = '' +
          '<style type="text/css">' +
-         'table {' + 
-         'border:solid #000 !important;' + 
-         'border-width:1px 0 0 1px !important;' + 
-         '}' + 'th, td {' + 
+         'table {' +
+         'border:solid #000 !important;' +
+         'border-width:1px 0 0 1px !important;' +
+         '}' + 'th, td {' +
          'padding:12px !important;' +
          'border:solid #000 !important;' +
          'border-width:0 1px 1px 0 !important;' +
-         'font-size:20px !important;' + 
-         '}' + 
-         '#head4 {' + 
-         'font-size:20px !important;' + 
-         '}' + 
+         'font-size:20px !important;' +
+         '}' +
+         '#head4 {' +
+         'font-size:20px !important;' +
+         '}' +
          '</style>';
      htmlToPrint += divToPrint.outerHTML;
      newWin = window.open("");
