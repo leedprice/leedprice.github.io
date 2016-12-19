@@ -53,8 +53,8 @@
          var checkBrowser=safariFormValidation(this);
          if(checkBrowser === false){
              console.log(checkBrowser);
+                 this.preventDefault();
              return false;
-            this.preventDefault();
          }
          console.log(checkBrowser);
         
