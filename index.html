@@ -31,37 +31,44 @@
                         <div class="panel-body">
                             <form name="form" id="leedprice" action="javascript:void(0)" role="form">
                                 <br>
-                                <div class="form-group input-group"> <span class="input-group-addon"><i id="country-icon" class="fa fa-globe"></i></span>
-                            <select class="form-control" id="country" name="country" oninput="verifyValidInput(this,'country')" required oninvalid="checkValidationInput(this,'country')"></select>
-                            <script language="javascript">
-                            print_country("country");
-                            </script>
-                        </div>
-                        <div class="form-group input-group"> <span class="input-group-addon"><i class="fa fa-star" aria-hidden="true"></i></span>
-                        <select class="form-control" id="ratingSystem" name="ratingSystem" oninput="verifyValidInput(this,'ratingSystem')" required oninvalid="checkValidationInput(this,'ratingSystem')">
-                            <option value="">--Select Rating Sytem--</option>
-                            <option value="BD+C">Building Design and Construction (BD+C)</option>
-                            <option value="ID+C">Interior Design and Construction (ID+C)</option>
-                            <option value="O+M">Building Operations and Maintenance (O+M)</option>
-                        </select>
+                               <div class="form-group input-group"> <span class="input-group-addon"><i id="country-icon" class="fa fa-globe"></i></span>
+                                  <select class="form-control required" id="country" name="country" oninput="verifyValidInput(this,'country')" required oninvalid="checkValidationInput(this,'country')"></select>
+                                  <script language="javascript">
+                                  print_country("country");
+                                  </script>
+                              </div>
+
+                              <div class="form-group input-group"> <span class="input-group-addon"><i class="fa fa-star" aria-hidden="true"></i></span>
+                                 <select class="form-control required" id="ratingSystem" name="ratingSystem" oninput="verifyValidInput(this,'ratingSystem')" required oninvalid="checkValidationInput(this,'ratingSystem')">
+                                  <option value="">--Select Rating Sytem--</option>
+                                  <option value="BD+C">Building Design and Construction (BD+C)</option>
+                                  <option value="ID+C">Interior Design and Construction (ID+C)</option>
+                                  <option value="O+M">Building Operations and Maintenance (O+M)</option>
+                                 </select>
+                             </div>
+
+                             <div class="form-group input-group"> <span class="input-group-addon"><i class="fa fa-file-text" aria-hidden="true"></i></span>
+                               <select class="form-control required" id="type" name="type" oninput="verifyValidInput(this,'type')" required oninvalid="checkValidationInput(this,'type')">
+                                 <option value="">--Select Rate Type--</option>
+                              </select>
+                             </div>
+                             
+                             <div class="form-group input-group"> <span class="input-group-addon"><i class="fa fa-object-group" aria-hidden="true"></i></span>
+                              <input type="number" id="givenArea" value="" name="givenArea" class="form-control required" placeholder="Enter area in Square Feet" oninput="verifyValidInput(this,'givenArea')" required oninvalid="checkValidationInput(this,'givenArea')"> 
+                             </div>
+                           
+                            <div class="form-group">
+                              <button class="btn btn-primary" type="submit" name="submit" id="submit-calculate"> <i class="fa fa-calculator" aria-hidden="true"></i> Calculate</button>
+                            <div class="pull-right">
+                                <button type="button" class="btn btn-danger" onclick="resetFormData()">Reset</button> 
+                            </div>
+                            </div>
+                         </form>
+                       </div>
+                     </div>
                     </div>
-                    <div class="form-group input-group"> <span class="input-group-addon"><i class="fa fa-file-text" aria-hidden="true"></i></span>
-                    <select class="form-control" id="type" name="type" oninput="verifyValidInput(this,'type')" required oninvalid="checkValidationInput(this,'type')">
-                        <option value="">--Select Rate Type--</option>
-                    </select>
-                </div>
-                <div class="form-group input-group"> <span class="input-group-addon"><i class="fa fa-object-group" aria-hidden="true"></i></span>
-                <input type="number" id="givenArea" value="" name="givenArea" class="form-control" placeholder="Enter area in Square Feet" oninput="verifyValidInput(this,'givenArea')" required oninvalid="checkValidationInput(this,'givenArea')"> </div>
-                <div class="form-group">
-                    <button class="btn btn-primary" type="submit" name="submit" id="submit-calculate"> <i class="fa fa-calculator" aria-hidden="true"></i> Calculate</button>
-                    <div class="pull-right"><button type="button" class="btn btn-danger" onclick="resetFormData()">Reset</button> </div>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-</div>
-</div>
+                 </div>
+            </div>
 
 <div class="modal fade" id="modalpopup" tabindex="-1" role="dialog">
     <div class="modal-dialog modal-md">

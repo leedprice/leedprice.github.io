@@ -43,11 +43,23 @@
      });
      
      $("#leedprice").submit(function () {
-         $("#submit-calculate").replaceWith("<button id=\"submit-dynamic\" class=\"btn btn-danger\" disabled><i class=\"fa fa-spinner fa-pulse\"></i> Calculating</button>");
+         
          var country = $("#country").val();
          var ratingSystem = $("#ratingSystem").val();
          var type = $('#type').val();
          var givenArea = $('#givenArea').val();
+
+         //For safari and other browsers which does not support HTML5 validation
+         var checkBrowser=safariFormValidation(this);
+         if(checkBrowser === false){
+             console.log(checkBrowser);
+             return false;
+            this.preventDefault();
+         }
+         console.log(checkBrowser);
+        
+       
+         $("#submit-calculate").replaceWith("<button id=\"submit-dynamic\" class=\"btn btn-danger\" disabled><i class=\"fa fa-spinner fa-pulse\"></i> Calculating</button>");
       
          setDescrpition(givenArea, type, ratingSystem);
          $.getJSON('https://leedonline-api.usgbc.org/v1/Common/getPriceRelatedInfo.json?countryOrCurrency=' + country, function (infodata) {
@@ -264,6 +276,27 @@
      } catch (e) {
          console.log(e);
         }
+ }
+
+ //Validation for safari and other Non HTML5 form validation 
+ function safariFormValidation(obj){
+
+     if (!obj.checkValidity()) {  //checkValidity not available in NonHTNL5
+        var valid = true;
+
+         $('.required').each(function() {
+            if (this.value == '') {
+              alert("Error, Data field is required.");      
+               valid = false;
+               this.focus();
+               return false; }
+          });
+          
+         if(valid === false){
+            return false;}
+         else{ return true; }
+      }
+    else { return true;   }
  }
 
  function printData() {
