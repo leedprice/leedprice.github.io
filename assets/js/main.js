@@ -3,6 +3,7 @@
      $("#country-icon").replaceWith("<i id=\"country-icon-dynamic\" class=\"fa fa-refresh fa-pulse\"></i>");
      $.getJSON('https://leedonline-api.usgbc.org/v1/Common/getCountriesAndStates.json', function (data) {
          var option_str = document.getElementById(country_id);
+         option_str.innerHTML = "";
          option_str.length = 0;
          option_str.options[0] = new Option('--Select Country--', '');
          option_str.selectedIndex = 0;
