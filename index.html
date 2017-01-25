@@ -55,8 +55,16 @@
                               </select>
                              </div>
                              
+                             <div class="form-group input-group"> <span class="input-group-addon"><i class="fa fa-star" aria-hidden="true"></i></span>
+                                 <select class="form-control required" id="unitType" name="unitType" required>
+                                  <option value="">--Select Unit Type--</option>
+                                  <option value="IP">IP (sq ft)</option>
+                                  <option value="SI">SI (sq m)</option>
+                                 </select>
+                             </div>
+                             
                              <div class="form-group input-group"> <span class="input-group-addon"><i class="fa fa-object-group" aria-hidden="true"></i></span>
-                              <input type="number" id="givenArea" value="" name="givenArea" class="form-control required" placeholder="Enter area in Square Feet" onchange="verifyValidInput(this,'givenArea')" required oninvalid="checkValidationInput(this,'givenArea')"> 
+                              <input type="number" id="givenArea" value="" name="givenArea" class="form-control required" placeholder="Enter area" onchange="verifyValidInput(this,'givenArea')" required oninvalid="checkValidationInput(this,'givenArea')"> 
                              </div>
                            
                             <div class="form-group">
