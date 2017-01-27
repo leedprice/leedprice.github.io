@@ -56,7 +56,7 @@
                              </div>
                              
                              <div class="form-group input-group"> <span class="input-group-addon"><i class="fa fa-star" aria-hidden="true"></i></span>
-                                 <select class="form-control required" id="unitType" name="unitType" required>
+                                 <select class="form-control required" id="unitType" name="unitType" onchange="verifyValidInput(this,'unitType')" required oninvalid="checkValidationInput(this,'unitType')">
                                   <option value="">--Select Unit Type--</option>
                                   <option value="IP">IP (sq ft)</option>
                                   <option value="SI">SI (sq m)</option>

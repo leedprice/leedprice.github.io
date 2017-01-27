@@ -9,6 +9,7 @@ if(currentEnv == 'dev' || currentEnv == 'stg' || currentEnv == 'qas')
 else
     window.location.replace("https://leed-pricing.usgbc.org/");
 
+
 function print_country(country_id) {
 	$("#country-icon").replaceWith("<i id=\"country-icon-dynamic\" class=\"fa fa-refresh fa-pulse\"></i>");
 	
@@ -257,6 +258,7 @@ function createTotalPriceTable(infodata, pricedata, curSymbol) {
          "country": "Please select country in the list.",
          "ratingSystem": "Please select Rating System in the list.",
          "type": "Select Project Type.",
+         "unitType": "Please select unit type.",
          "givenArea": "Please enter area."
      };
      switch (param) {
@@ -272,6 +274,9 @@ function createTotalPriceTable(infodata, pricedata, curSymbol) {
          case "givenArea":
              obj.setCustomValidity(setMessage[param]);
              break;
+         case "unitType":
+             obj.setCustomValidity(setMessage[param]);
+             break;      
          default:
              return;
              break;
@@ -294,6 +299,9 @@ function createTotalPriceTable(infodata, pricedata, curSymbol) {
              case "givenArea":
                  obj.setCustomValidity('');
                  break;
+             case "unitType":
+                 obj.setCustomValidity('');
+                 break;         
              default:
                  return;
                  break;
